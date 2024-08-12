@@ -21,7 +21,7 @@ np.random.seed(42)
 torch.manual_seed(42)
 
 # Gather all data from all directories
-all_dirs = glob('/netscratch/shimizu/yanagisawa-ape/processed_data/*.npz')
+all_dirs = glob('/path/to/your/data')
 
 # Shuffle the dirs
 random.shuffle(all_dirs)
@@ -42,8 +42,8 @@ val_loader = DataLoader(val_dataset, batch_size=128, shuffle=True)
 test_dataset = CustomDataset(data=test_data)
 test_loader = DataLoader(test_dataset, batch_size=128, shuffle=True)
 
-os.makedirs('/netscratch/shimizu/yanagisawa-ape',exist_ok=True)
-current_path = '/netscratch/shimizu/yanagisawa-ape/'
+os.makedirs('/path/to/you',exist_ok=True)
+current_path = '/path/to/you'
 
 # Parameters
 drops = [0.5, 0.25, 0.1, 0]
@@ -73,7 +73,7 @@ models = {
 }
 
 def train_and_validate(drop, lr, wd, model_class, modelname):
-    save_dir = 'ape_0.5_0.5_5models'
+    save_dir = 'save_dir'
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model_class(n_timesteps=500, n_features=32, n_outputs=2, DR=drop)
     model.to(device).double() 
@@ -194,7 +194,7 @@ for modelname, model_class in models.items():
         results[modelname].append((drop, lr, wd, acc))
 
 output_dir = current_path + '/result'
-output_path = os.path.join(output_dir, "results_test_splited.txt")
+output_path = os.path.join(output_dir, "results.txt")
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
